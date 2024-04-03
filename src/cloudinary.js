@@ -33,3 +33,7 @@ async function uploadImage(imageBase64) {
         throw error;
     }
 }
+
+module.exports = {
+    uploadImage
+};
