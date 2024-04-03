@@ -2,7 +2,7 @@
   "name": "to-do-app",
   "version": "1.0.0",
   "description": "",
-  "main": "server",
+  "main": "src/server",
   "scripts": {
     "test": "",
     "server:dev": "nodemon -r dotenv/config src/server.js"
