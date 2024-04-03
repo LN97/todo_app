@@ -5,7 +5,8 @@
   "main": "src/server",
   "scripts": {
     "test": "",
-    "server:dev": "nodemon -r dotenv/config src/server.js"
+    "server:dev": "nodemon -r dotenv/config src/server.js",
+    "start": "node src/server.js"
   },
   "author": "",
   "license": "ISC",
