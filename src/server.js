@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const Todo = require('./model');
+const cloudinary = require('./cloudinary');
+const { uploadImage } = cloudinary;
 
 // Initialize express app
 const app = express();
@@ -10,6 +12,8 @@ const app = express();
 app.use(cors());
 require('dotenv').config();
 
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Use express json middleware to parse JSON bodies
 app.use(express.json());
@@ -30,22 +34,26 @@ app.get('/', (req, res) => {
 // Create a new Todo item
 app.post('/api/todos', async (req, res) => {
   const { title, description , location, reminderDate, photoUri } = req.body;
-  const todo = new Todo({
-    title,
-    description,
-    location, reminderDate,
-    photoUri: photoUri
-  });
-
   try {
+    let cloudinaryUrl = await uploadImage( photoUri );
+
+    console.log( cloudinaryUrl );
+  
+    const todo = new Todo({
+      title,
+      description,
+      location, reminderDate,
+      photoUri: cloudinaryUrl
+    });
+  
     await todo.save();
     // Fetch the updated list of todo items
     const newTodos = await Todo.find({});
     // Send the updated list of todo items back to the client
     res.json( newTodos );
   } catch (err) {
-    console.log( err )
-    res.status(400).json({ message: err.message });
+    console.log( 'err' )
+    res.status(400).json({ message: 'eror saving task' });
   }
 });
 
