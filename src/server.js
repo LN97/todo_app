@@ -53,7 +53,7 @@ app.post('/api/todos', async (req, res) => {
     res.json( newTodos );
   } catch (err) {
     console.log( 'err' )
-    res.status(400).json({ message: 'eror saving task' });
+    res.status(400).json({ message: err });
   }
 });
 
