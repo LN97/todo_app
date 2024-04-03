@@ -35,7 +35,10 @@ async function uploadImage(imageBase64) {
         return result.url;
 
     } catch (error) {
-        console.error('Upload to Cloudinary failed:', error);
+        console.error('Upload to Cloudinary failed:', error.message);
+        if (error.response) {
+            console.error('Response:', error.response);
+        }
         throw error;
     }
 }
