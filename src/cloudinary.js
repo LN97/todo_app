@@ -1,25 +1,35 @@
 const cloudinary = require('cloudinary').v2;
 
-cloudinary.config({ 
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
-  api_key: process.env.CLOUDINARY_API_KEY, 
-  api_secret: process.env.CLOUDINARY_API_SECRET 
-});
+// Your existing configuration...
 
 async function uploadImage(imageBase64) {
     try {
-        // Directly await the promise returned by the upload method
-        const result = await cloudinary.uploader.upload(imageBase64);
+        const timestamp = Math.round((new Date()).getTime() / 1000);
 
-        // Once the upload is successful, return the URL
+        // Use Cloudinary's API to generate the signature
+        const signaturePayload = {
+            timestamp: timestamp,
+            // Include any other parameters you want to send for the upload
+        };
+
+        // Generating the signature
+        const signatureResult = cloudinary.utils.api_sign_request(signaturePayload, process.env.CLOUDINARY_API_SECRET);
+
+        // Constructing parameters for the upload, including the generated signature
+        const params = {
+            ...signaturePayload,
+            api_key: process.env.CLOUDINARY_API_KEY,
+            signature: signatureResult
+        };
+
+        // Uploading the image
+        const result = await cloudinary.uploader.upload(imageBase64, params);
+        
+        // Returning the URL of the uploaded image
         return result.url;
 
     } catch (error) {
         console.error('Upload to Cloudinary failed:', error);
-        throw error; // Rethrowing the error to be caught by the caller
+        throw error;
     }
 }
-
-module.exports = {
-    uploadImage
-};
