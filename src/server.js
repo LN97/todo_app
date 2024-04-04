@@ -27,7 +27,7 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // Define a simple route
 app.get('/', (req, res) => {
-  res.send('To Do app backend API');
+  res.send('Hello World!');
 });
 
 
