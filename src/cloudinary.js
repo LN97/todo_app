@@ -20,7 +20,7 @@
 //     uploadImage
 // };
 
-const cloudinary = require('cloudinary').v2;
+import { v2 as cloudinary } from 'cloudinary';
 
 // Your existing configuration...
 
@@ -43,6 +43,6 @@ async function uploadImage(imageBase64) {
     }
 }
 
-module.exports = {
+export default {
     uploadImage
 };

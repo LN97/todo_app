@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const Todo = require('./model');
-const cloudinary = require('./cloudinary');
+const cloudinary = require('./cloudinary').default;
 const { uploadImage } = cloudinary;
 
 // Initialize express app
@@ -27,7 +27,7 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // Define a simple route
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('To Do app backend API');
 });
 
 
