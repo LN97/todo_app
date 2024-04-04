@@ -31,67 +31,29 @@ app.get('/', (req, res) => {
 });
 
 
-// // Create a new Todo item
-// app.post('/api/todos', async (req, res) => {
-//   const { title, description , location, reminderDate, photoUri } = req.body;
-//   try {
-//     let cloudinaryUrl = await uploadImage( photoUri );
-
-//     console.log( cloudinaryUrl );
-  
-//     const todo = new Todo({
-//       title,
-//       description,
-//       location, reminderDate,
-//       photoUri: cloudinaryUrl
-//     });
-  
-//     await todo.save();
-//     // Fetch the updated list of todo items
-//     const newTodos = await Todo.find({});
-//     // Send the updated list of todo items back to the client
-//     res.json( newTodos );
-//   } catch (err) {
-//     console.log( 'err' )
-//     res.status(400).json({ message: err });
-//   }
-// });
-
-
-//todos without picture
-
+// Create a new Todo item
 app.post('/api/todos', async (req, res) => {
-  const { title, description, location, reminderDate, photoUri } = req.body;
-
-  let cloudinaryUrl = ""; // Initialize with a default or empty string
-  // Only attempt to upload if photoUri is provided
-  if (photoUri) {
-    try {
-      cloudinaryUrl = await uploadImage(photoUri);
-      console.log(cloudinaryUrl);
-    } catch (err) {
-      console.error('Error uploading image:', err);
-      // Optionally, handle the error, e.g., by sending a response or logging
-    }
-  }
-
+  const { title, description , location, reminderDate, photoUri } = req.body;
   try {
+    let cloudinaryUrl = await uploadImage( photoUri );
+
+    console.log( cloudinaryUrl );
+  
     const todo = new Todo({
       title,
       description,
-      location,
-      reminderDate,
-      photoUri: cloudinaryUrl // This will be an empty string if photoUri was not provided
+      location, reminderDate,
+      photoUri: cloudinaryUrl
     });
-
+  
     await todo.save();
     // Fetch the updated list of todo items
     const newTodos = await Todo.find({});
     // Send the updated list of todo items back to the client
-    res.json(newTodos);
+    res.json( newTodos );
   } catch (err) {
-    console.log('Error saving todo:', err);
-    res.status(400).json({ message: err.message });
+    console.log( 'err' )
+    res.status(400).json({ message: err });
   }
 });
 
