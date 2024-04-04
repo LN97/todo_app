@@ -2,8 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const Todo = require('./model');
-const cloudinary = require('./cloudinary').default;
-const { uploadImage } = cloudinary;
+const { uploadImage } = require('./cloudinary');
+
 
 // Initialize express app
 const app = express();
