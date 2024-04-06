@@ -33,28 +33,41 @@ app.get('/', (req, res) => {
 
 // Create a new Todo item
 app.post('/api/todos', async (req, res) => {
-  const { title, description , location, reminderDate, photoUri } = req.body;
+  const { title, description , location, reminderDate } = req.body;
   try {
-    let cloudinaryUrl = await uploadImage( photoUri );
-
-    console.log( cloudinaryUrl );
-  
     const todo = new Todo({
       title,
       description,
-      location, reminderDate,
-      photoUri: cloudinaryUrl
+      location, reminderDate
     });
   
-    await todo.save();
+    let todoSaved = await todo.save();
+    console.log( todoSaved );
     // Fetch the updated list of todo items
     const newTodos = await Todo.find({});
     // Send the updated list of todo items back to the client
-    res.json( newTodos );
+    res.json({ newTodos , taskId: todoSaved._id });
   } catch (err) {
     console.log( 'err' )
     res.status(400).json({ message: err });
   }
+});
+
+app.post('/api/todos/:id/image' , async ( req , res ) => {
+    try {
+      const { id } = req.params; 
+      const { image } = req.body;
+      
+      let cloudinaryUrl = await uploadImage( image );
+      await Todo.findByIdAndUpdate( { _id: id}, { photoUri: cloudinaryUrl });
+      const updatedTodos = await Todo.find({});
+      // Return the updated list
+      res.json({ updatedTodos });
+    }
+    catch( err ) {
+      console.log( err )
+      res.status(400).json({ message: err });
+    }
 });
 
 
