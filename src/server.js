@@ -15,10 +15,10 @@ require('dotenv').config();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-// Use express json middleware to parse JSON bodies
+// Uses express json middleware to parse JSON bodies
 app.use(express.json());
 
-// MongoDB URI - replace 'your_mongodb_uri' with your actual MongoDB URI
+// MongoDB URI - replaces 'mongodb_uri' with actual MongoDB URI
 const mongoURI = process.env.mongoURI;
 // Connect to MongoDB
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -53,6 +53,8 @@ app.post('/api/todos', async (req, res) => {
   }
 });
 
+// update task with image
+
 app.post('/api/todos/:id/image' , async ( req , res ) => {
     try {
       const { id } = req.params; 
@@ -79,6 +81,25 @@ app.get('/api/todos', async (req, res) => {
     res.json(todos);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+app.put('/api/todos/:id', async ( req , res ) => {
+  const { id } = req.params;
+  const { title, description, reminderDate } = req.body;
+
+  try {
+    console.log('editing task')
+    // Find the todo item by id and update it
+    await Todo.findByIdAndUpdate(id, { title, description, reminderDate });
+    // Optionally, return the updated list of todos
+    const updatedTodos = await Todo.find();
+
+    // Assuming you want to return the updated list and the task id
+    res.json({ newTodos: updatedTodos });
+  } catch (error) {
+    console.error('Error updating todo:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

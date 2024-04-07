@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+// model schema
+
 const TodoSchema = new mongoose.Schema({
   title: {
     type: String,
