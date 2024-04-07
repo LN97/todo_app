@@ -27,7 +27,7 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // Define a simple route
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('To Do App Backend API');
 });
 
 
@@ -70,8 +70,7 @@ app.post('/api/todos/:id/image' , async ( req , res ) => {
       console.log( err )
       res.status(400).json({ message: err });
     }
-});
-
+});2
 
 // Get all Todo items
 app.get('/api/todos', async (req, res) => {
